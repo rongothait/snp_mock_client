@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 CONDITION_CODES = ["E11", "C50", "I10"]
 SAMPLE_NOTE_TEMPLATE = "Patient presented for routine follow-up."
 
-REFERENCE_CASE = "John Smith diagnosed with type 2 diabetes, on insulin 20 units"
+PRIOR_VISIT_SUMMARY = "Avery Chen presented with stage 2 hypertension, started on lisinopril 10mg daily"
 SENSITIVE_PROFILE = {"religion": "Catholic", "hiv_status": "positive"}
 
 

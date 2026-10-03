@@ -62,6 +62,11 @@ def score(
     negatives: set[tuple[str, int]] = {
         (n["file"], n["line"]) for n in labels["negatives"]
     }
+    # borderline lines are excluded from precision/recall/FP entirely; they are
+    # reported separately as a judgment-consistency probe (see score()'s tail).
+    borderline_entries = {
+        (b["file"], b["line"]): b for b in labels.get("borderline", [])
+    }
 
     def nearest_violation(file: str, line: int) -> tuple[str, int] | None:
         for delta in range(0, tol + 1):
@@ -83,9 +88,13 @@ def score(
     correct_findings = 0
     fp_detail: list[dict[str, Any]] = []
     fp_by_kind: dict[str, int] = defaultdict(int)
+    borderline_hits: dict[tuple[str, int], list[str]] = defaultdict(list)
 
     for f in findings:
         key = (f["file"], f["line"])
+        if key in borderline_entries:
+            borderline_hits[key].append(f["rule_id"])
+            continue
         vkey = nearest_violation(*key)
         if vkey is not None and f["rule_id"] in violation_rules[vkey]:
             correct_findings += 1
@@ -107,8 +116,10 @@ def score(
         fp_detail.append({**f, "kind": kind})
 
     total_violations = len(violation_rules)
-    total_findings = len(findings)
-    false_positives = total_findings - correct_findings
+    # Excludes borderline findings (handled separately above via `continue`),
+    # so precision is never penalized or inflated by the unscored cases.
+    false_positives = sum(fp_by_kind.values())
+    total_findings = correct_findings + false_positives
 
     correct_lines = len(caught_lines)
     recall = correct_lines / total_violations if total_violations else 0.0
@@ -137,6 +148,18 @@ def score(
         if (f, ln) not in caught_lines
     ]
 
+    borderline_calls = [
+        {
+            "file": key[0],
+            "line": key[1],
+            "lean": entry["lean"],
+            "rationale": entry["rationale"],
+            "flagged": key in borderline_hits,
+            "rule_ids": sorted(set(borderline_hits.get(key, []))),
+        }
+        for key, entry in sorted(borderline_entries.items())
+    ]
+
     return {
         "scope": scope,
         "mode": report.get("mode"),
@@ -160,6 +183,7 @@ def score(
         "per_rule_recall": per_rule,
         "missed_violations": missed,
         "false_positive_detail": fp_detail,
+        "borderline_calls": borderline_calls,
     }
 
 
@@ -179,6 +203,11 @@ def _print(result: dict[str, Any]) -> None:
         print("  missed violations:")
         for mv in result["missed_violations"]:
             print(f"    {mv['file']}:{mv['line']}  {'/'.join(mv['rule_ids'])}")
+    if result["borderline_calls"]:
+        print("  borderline calls (excluded from metrics above):")
+        for b in result["borderline_calls"]:
+            call = f"flagged as {'/'.join(b['rule_ids'])}" if b["flagged"] else "not flagged"
+            print(f"    {b['file']}:{b['line']}  {call}  (lean: {b['lean']})")
 
 
 def main() -> int:

@@ -32,9 +32,10 @@ def main() -> int:
     injected = set(labels["injected_files"])
     errors: list[str] = []
     seen: dict[tuple[str, int], str] = {}
+    buckets = ("violations", "negatives", "borderline")
 
-    for kind in ("violations", "negatives"):
-        for entry in labels[kind]:
+    for kind in buckets:
+        for entry in labels.get(kind, []):
             key = (entry["file"], entry["line"])
             where = f"{kind} {key[0]}:{key[1]}"
             if entry["file"] not in injected:
@@ -56,6 +57,15 @@ def main() -> int:
         if not entry.get("rule_ids"):
             errors.append(f"violation {entry['file']}:{entry['line']}: no rule_ids")
 
+    for entry in labels.get("borderline", []):
+        if entry.get("lean") not in ("violation", "compliant"):
+            errors.append(
+                f"borderline {entry['file']}:{entry['line']}: lean must be "
+                "'violation' or 'compliant'"
+            )
+        if not entry.get("rationale"):
+            errors.append(f"borderline {entry['file']}:{entry['line']}: no rationale")
+
     if errors:
         print("LABELS INVALID:")
         for error in errors:
@@ -64,7 +74,8 @@ def main() -> int:
 
     print(
         f"labels OK: {len(labels['violations'])} violations, "
-        f"{len(labels['negatives'])} negatives across {len(injected)} files"
+        f"{len(labels['negatives'])} negatives, "
+        f"{len(labels.get('borderline', []))} borderline cases across {len(injected)} files"
     )
     return 0
 

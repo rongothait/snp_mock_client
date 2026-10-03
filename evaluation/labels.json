@@ -6,6 +6,7 @@
     "clinic/integrations/telemetry.py",
     "clinic/integrations/analytics.py",
     "clinic/integrations/debug_routes.py",
+    "clinic/integrations/borderline_cases.py",
     "web/patient_portal.js"
   ],
   "violations": [
@@ -17,7 +18,7 @@
     {"file": "clinic/integrations/analytics.py", "line": 23, "rule_ids": ["HIPAA-004", "GDPR-004"], "expect": "p.ssn", "note": "export of direct identifiers + diagnosis"},
     {"file": "clinic/integrations/analytics.py", "line": 27, "rule_ids": ["HIPAA-004", "GDPR-004"], "expect": "full_name", "note": "CSV export of personal fields"},
     {"file": "clinic/integrations/analytics.py", "line": 31, "rule_ids": ["GDPR-004", "HIPAA-004", "GDPR-002"], "expect": "user.email", "note": "personal data sent to third-party analytics"},
-    {"file": "clinic/integrations/debug_routes.py", "line": 12, "rule_ids": ["HIPAA-003", "HIPAA-001"], "expect": "type 2 diabetes", "note": "hardcoded clinical narrative tied to a named person"},
+    {"file": "clinic/integrations/debug_routes.py", "line": 12, "rule_ids": ["HIPAA-003", "HIPAA-001", "GDPR-003"], "expect": "stage 2 hypertension", "note": "hardcoded clinical narrative tied to a named person; health data is also GDPR special-category data. No regex detector matches this phrasing (no 'diagnosed with'/'diabetes'/etc. keyword), so catching it requires genuine semantic judgment, not a regex hint."},
     {"file": "clinic/integrations/debug_routes.py", "line": 13, "rule_ids": ["GDPR-003", "HIPAA-003"], "expect": "hiv_status", "note": "special-category data literal"},
     {"file": "clinic/integrations/debug_routes.py", "line": 18, "rule_ids": ["HIPAA-002", "GDPR-002"], "expect": "print(\"dump\", patient)", "note": "whole patient object printed"},
     {"file": "clinic/integrations/debug_routes.py", "line": 19, "rule_ids": ["HIPAA-002", "GDPR-002"], "expect": "clinical_notes", "note": "clinical notes logged"},
@@ -40,5 +41,37 @@
     {"file": "clinic/integrations/debug_routes.py", "line": 10, "expect": "routine follow-up", "note": "generic note template, no person"},
     {"file": "clinic/integrations/debug_routes.py", "line": 17, "expect": "server address", "note": "server bind address, not personal"},
     {"file": "web/patient_portal.js", "line": 2, "expect": "login ok", "note": "pseudonymous id log"}
+  ],
+  "borderline": [
+    {
+      "file": "clinic/integrations/borderline_cases.py", "line": 12,
+      "expect": "j***@gmail.com", "lean": "compliant",
+      "rationale": "Partially masked email: only the local part is truncated, domain is intact. Debatable whether truncation counts as adequate redaction."
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py", "line": 13,
+      "expect": "4152719931", "lean": "compliant",
+      "rationale": "A 10-digit number matching the phone regex, framed as a shared department fax line rather than one named person's number. Debatable whether a departmental line is personal data."
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py", "line": 14,
+      "expect": "A.C.", "lean": "compliant",
+      "rationale": "Initials only. Not a listed direct identifier under HIPAA Safe Harbor on its own, but could be linkable given other context."
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py", "line": 16,
+      "expect": "jane.smith@gmail.com", "lean": "violation",
+      "rationale": "A real-looking personal email inside a comment, not an executable literal. Debatable whether comments are in scope the same way code literals are."
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py", "line": 20,
+      "expect": "accessed record snapshot=%s", "lean": "compliant",
+      "rationale": "Logs a whole Patient object via %s formatting, which matches the 'whole object logged' violation pattern structurally -- but clinic.models.Patient marks every PHI field repr=False, so today this does not literally emit identifiers. Debatable because that safety is incidental to the call site, not guaranteed by it."
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py", "line": 25,
+      "expect": "zip_code", "lean": "violation",
+      "rationale": "Exports a full 5-digit ZIP code (a census quasi-identifier) alongside an aggregate count. Not a 'direct identifier' as the rule defines it, but a de-identification purist would still flag it; HIPAA Safe Harbor requires 3-digit truncation for some areas."
+    }
   ]
 }

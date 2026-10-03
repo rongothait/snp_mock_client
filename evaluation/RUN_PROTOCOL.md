@@ -89,3 +89,14 @@ uv run --project ../snp-final-version python evaluation/bench_latency.py \
 | §4.2 per-rule / missed | `score_full_*.json` → `per_rule_recall`, `missed_violations` |
 | §4.3 small/medium latency | `latency.json` → `small_commit` / `medium_commit` `cycle_mean_ms` |
 | §4.3 memory | `latency.json` → `peak_memory_mb` |
+| §5 discussion (judgment consistency) | `aggregate_full.json` → `borderline_agreement` |
+
+## Note on `evaluation/runs/archive_v1_pre_hardening/`
+
+Those 5 runs were scored against an earlier version of the benchmark before two
+fixes: a ground-truth gap (`debug_routes.py:12` is also a valid GDPR-003 case,
+not just HIPAA) and a too-easy line that duplicated the HIPAA policy's own
+example almost verbatim. They're kept for the investigation trail but are
+**stale** — the corpus has since changed (that line's wording, plus a new
+`borderline_cases.py` file), so don't mix them into a current aggregate. Produce
+a fresh N≥5 under `evaluation/runs/` against the current corpus instead.

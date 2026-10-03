@@ -38,6 +38,19 @@ of rule IDs (`rule_ids`), and a finding is correct if its rule is in that set.
 `injected_other`, `clean_code`) and reports per-rule recall and the list of missed
 violations.
 
+### Borderline cases (not scored)
+
+`clinic/integrations/borderline_cases.py` holds six lines the policies genuinely
+don't give a clean answer for (a partially-masked email, a departmental fax
+line, initials-only identifiers, a personal email in a comment, a whole object
+logged through a field marked `repr=False`, a full ZIP code in an aggregate
+export). These are excluded from precision/recall/FP entirely — scoring them
+pass/fail would just be *our* opinion, not ground truth. Instead, `score.py`
+records whether each was flagged, and `aggregate.py` reports whether repeated
+runs agree (`UNANIMOUS`) or disagree (`SPLIT`) on each one. **This is where
+run-to-run variance is expected and meaningful** — unlike the main corpus, whose
+cases are unambiguous and should converge to ~0% variance across runs.
+
 ## Files
 
 | File | Purpose |
@@ -81,3 +94,8 @@ uv run --project ../snp-final-version python evaluation/bench_latency.py \
 - **Accuracy comes from real agent runs.** The reviewing model is stochastic, so
   report mean ± std over several independent runs. A judging session must not open
   `evaluation/labels.json`.
+- **A line that's "too easy" is also a validity risk.** The original
+  `debug_routes.py` clinical-narrative line was almost a verbatim copy of the
+  HIPAA policy's own few-shot example, which tests pattern-matching against the
+  prompt rather than generalization. It was rewritten with original wording that
+  no regex detector matches, so catching it requires real semantic judgment.

@@ -1,0 +1,58 @@
+{
+  "scope": "full",
+  "mode": "full-scan",
+  "scan_id": "20261003T080106.192279Z-467e625f",
+  "active_policies": [
+    "hipaa",
+    "gdpr"
+  ],
+  "totals": {
+    "violation_lines": 15,
+    "negative_lines": 14,
+    "findings": 29,
+    "correct_findings": 29,
+    "false_positives": 0,
+    "violation_lines_caught": 15,
+    "negative_lines_flagged": 0
+  },
+  "metrics": {
+    "recall": 1.0,
+    "precision": 1.0,
+    "fp_rate_traps": 0.0
+  },
+  "fp_by_kind": {},
+  "per_rule_recall": {
+    "GDPR-003": {
+      "caught": 1,
+      "total": 1,
+      "recall": 1.0
+    },
+    "GDPR-004": {
+      "caught": 1,
+      "total": 1,
+      "recall": 1.0
+    },
+    "HIPAA-001": {
+      "caught": 3,
+      "total": 3,
+      "recall": 1.0
+    },
+    "HIPAA-002": {
+      "caught": 7,
+      "total": 7,
+      "recall": 1.0
+    },
+    "HIPAA-003": {
+      "caught": 1,
+      "total": 1,
+      "recall": 1.0
+    },
+    "HIPAA-004": {
+      "caught": 2,
+      "total": 2,
+      "recall": 1.0
+    }
+  },
+  "missed_violations": [],
+  "false_positive_detail": []
+}

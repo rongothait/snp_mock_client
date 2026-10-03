@@ -3,3 +3,8 @@ __pycache__/
 .venv/
 .env
 reports/
+.DS_Store
+
+# Live scan state; curated evidence lives under evaluation/runs/ instead.
+.privacy-agent/audit-logs/*.json
+!.privacy-agent/audit-logs/.gitkeep
