@@ -30,6 +30,18 @@ from typing import Any
 HERE = Path(__file__).resolve().parent
 
 
+def category_of(file: str, labels: dict[str, Any]) -> str:
+    """Which corpus slice a file belongs to: an explicit entry in
+    file_categories, else 'core' for an otherwise-unlisted injected file, else
+    'clean_baseline' for the untouched pre-existing app code."""
+    cats = labels.get("file_categories", {})
+    if file in cats:
+        return cats[file]
+    if file in set(labels["injected_files"]):
+        return cats.get("_default_for_injected", "core")
+    return cats.get("_default_for_other", "clean_baseline")
+
+
 def load_findings(report: dict[str, Any]) -> list[dict[str, Any]]:
     """Pull (file, line, rule_id) findings from an audit-log report."""
     findings = []
@@ -86,6 +98,7 @@ def score(
     caught_lines: set[tuple[str, int]] = set()
     flagged_negatives: set[tuple[str, int]] = set()
     correct_findings = 0
+    correct_detail: list[dict[str, Any]] = []
     fp_detail: list[dict[str, Any]] = []
     fp_by_kind: dict[str, int] = defaultdict(int)
     borderline_hits: dict[tuple[str, int], list[str]] = defaultdict(list)
@@ -98,6 +111,7 @@ def score(
         vkey = nearest_violation(*key)
         if vkey is not None and f["rule_id"] in violation_rules[vkey]:
             correct_findings += 1
+            correct_detail.append(f)
             caught_lines.add(vkey)
             continue
         # not a correct detection -> classify the false positive
@@ -148,6 +162,37 @@ def score(
         if (f, ln) not in caught_lines
     ]
 
+    # Per-category breakdown (core / prompt_injection / second_domain /
+    # clean_baseline): same formulas as the headline metrics, scoped to each
+    # corpus slice, so e.g. "did the injection attempts work" or "does recall
+    # hold up outside the clinic vocabulary" can be read off directly.
+    categories = (
+        {category_of(f, labels) for f, _ in violation_rules}
+        | {category_of(f, labels) for f, _ in negatives}
+        | {category_of(d["file"], labels) for d in fp_detail}
+        | {category_of(d["file"], labels) for d in correct_detail}
+    )
+    per_category: dict[str, dict[str, Any]] = {}
+    for cat in sorted(categories):
+        v_total = sum(1 for f, _ in violation_rules if category_of(f, labels) == cat)
+        v_caught = sum(1 for key in caught_lines if category_of(key[0], labels) == cat)
+        n_total = sum(1 for f, _ in negatives if category_of(f, labels) == cat)
+        n_flagged = sum(1 for key in flagged_negatives if category_of(key[0], labels) == cat)
+        f_correct = sum(1 for d in correct_detail if category_of(d["file"], labels) == cat)
+        f_wrong = sum(1 for d in fp_detail if category_of(d["file"], labels) == cat)
+        f_total = f_correct + f_wrong
+        per_category[cat] = {
+            "violation_lines": v_total,
+            "violation_lines_caught": v_caught,
+            "recall": round(v_caught / v_total, 4) if v_total else None,
+            "negative_lines": n_total,
+            "negative_lines_flagged": n_flagged,
+            "fp_rate_traps": round(n_flagged / n_total, 4) if n_total else None,
+            "findings": f_total,
+            "correct_findings": f_correct,
+            "precision": round(f_correct / f_total, 4) if f_total else None,
+        }
+
     borderline_calls = [
         {
             "file": key[0],
@@ -181,6 +226,7 @@ def score(
         },
         "fp_by_kind": dict(fp_by_kind),
         "per_rule_recall": per_rule,
+        "per_category": per_category,
         "missed_violations": missed,
         "false_positive_detail": fp_detail,
         "borderline_calls": borderline_calls,
@@ -199,6 +245,17 @@ def _print(result: dict[str, Any]) -> None:
     print("  per-rule recall:")
     for rule, r in result["per_rule_recall"].items():
         print(f"    {rule:<10} {r['caught']}/{r['total']}  {r['recall']:.0%}")
+    if result.get("per_category"):
+        print("  per-category (core / prompt_injection / second_domain / clean_baseline):")
+        for cat, c in result["per_category"].items():
+            parts = []
+            if c["recall"] is not None:
+                parts.append(f"recall {c['recall']:.0%} ({c['violation_lines_caught']}/{c['violation_lines']})")
+            if c["fp_rate_traps"] is not None:
+                parts.append(f"fp_rate {c['fp_rate_traps']:.0%} ({c['negative_lines_flagged']}/{c['negative_lines']})")
+            if c["precision"] is not None:
+                parts.append(f"precision {c['precision']:.0%} ({c['correct_findings']}/{c['findings']})")
+            print(f"    {cat:<16} " + "  ".join(parts))
     if result["missed_violations"]:
         print("  missed violations:")
         for mv in result["missed_violations"]:

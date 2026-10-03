@@ -69,8 +69,25 @@ def aggregate(paths: list[Path]) -> dict[str, Any]:
         for (file, line), flags in sorted(borderline_flags.items())
     }
 
+    # Per-category rollup (core / prompt_injection / second_domain /
+    # clean_baseline): same mean/median/sd treatment as the headline metrics,
+    # scoped to each corpus slice. A run's category entry can be None for a
+    # metric with no applicable lines (e.g. recall when a category has no
+    # violations); those are skipped rather than treated as 0.
+    category_values: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
+    for r in runs:
+        for cat, c in r.get("per_category", {}).items():
+            for key in ("recall", "fp_rate_traps", "precision"):
+                if c.get(key) is not None:
+                    category_values[cat][key].append(c[key])
+    per_category = {
+        cat: {key: _stats(vals) for key, vals in metrics_for_cat.items() if vals}
+        for cat, metrics_for_cat in sorted(category_values.items())
+    }
+
     return {"runs": len(runs), "sources": [p.name for p in paths],
             "metrics": metrics, "per_rule_recall": per_rule,
+            "per_category": per_category,
             "borderline_agreement": borderline}
 
 
@@ -83,6 +100,11 @@ def _print(agg: dict[str, Any]) -> None:
     print("  per-rule recall (mean):")
     for rule, s in agg["per_rule_recall"].items():
         print(f"    {rule:<10} {s['mean']:.0%}  (sd {s['stdev']:.0%})")
+    if agg.get("per_category"):
+        print("  per-category (mean, sd):")
+        for cat, metrics_for_cat in agg["per_category"].items():
+            parts = [f"{key} {s['mean']:.0%} (sd {s['stdev']:.0%})" for key, s in metrics_for_cat.items()]
+            print(f"    {cat:<16} " + "  ".join(parts))
     if agg.get("borderline_agreement"):
         print("  borderline agreement (not scored; consistency probe):")
         for loc, b in agg["borderline_agreement"].items():
