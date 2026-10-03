@@ -2,44 +2,44 @@
   {
     "bucket": "small_commit",
     "files": 4,
-    "repeats": 30,
+    "repeats": 50,
     "prepare_scan": {
-      "mean_ms": 83.32,
-      "median_ms": 80.67,
-      "p95_ms": 97.45,
-      "min_ms": 77.3,
-      "max_ms": 152.87
+      "mean_ms": 79.73,
+      "median_ms": 78.73,
+      "p95_ms": 88.73,
+      "min_ms": 76.27,
+      "max_ms": 96.27
     },
     "submit_findings_empty": {
-      "mean_ms": 111.43,
-      "median_ms": 110.94,
-      "p95_ms": 116.23,
-      "min_ms": 108.09,
-      "max_ms": 116.63
+      "mean_ms": 108.71,
+      "median_ms": 108.45,
+      "p95_ms": 113.16,
+      "min_ms": 106.34,
+      "max_ms": 113.77
     },
-    "cycle_mean_ms": 194.75,
+    "cycle_mean_ms": 188.44,
     "peak_memory_mb": 0.21,
     "hint_count": 36
   },
   {
     "bucket": "medium_commit",
     "files": 15,
-    "repeats": 30,
+    "repeats": 50,
     "prepare_scan": {
-      "mean_ms": 85.99,
-      "median_ms": 85.68,
-      "p95_ms": 89.33,
-      "min_ms": 82.46,
-      "max_ms": 94.9
+      "mean_ms": 84.59,
+      "median_ms": 84.42,
+      "p95_ms": 86.36,
+      "min_ms": 82.54,
+      "max_ms": 93.86
     },
     "submit_findings_empty": {
-      "mean_ms": 117.71,
-      "median_ms": 117.26,
-      "p95_ms": 120.83,
-      "min_ms": 115.49,
-      "max_ms": 122.05
+      "mean_ms": 118.29,
+      "median_ms": 117.71,
+      "p95_ms": 121.14,
+      "min_ms": 112.6,
+      "max_ms": 163.78
     },
-    "cycle_mean_ms": 203.7,
+    "cycle_mean_ms": 202.88,
     "peak_memory_mb": 0.22,
     "hint_count": 135
   }

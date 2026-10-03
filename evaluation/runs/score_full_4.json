@@ -1,0 +1,111 @@
+{
+  "scope": "full",
+  "mode": "full-scan",
+  "scan_id": "20261003T084301.484480Z-6c8cd78c",
+  "active_policies": [
+    "hipaa",
+    "gdpr"
+  ],
+  "totals": {
+    "violation_lines": 15,
+    "negative_lines": 14,
+    "findings": 29,
+    "correct_findings": 29,
+    "false_positives": 0,
+    "violation_lines_caught": 15,
+    "negative_lines_flagged": 0
+  },
+  "metrics": {
+    "recall": 1.0,
+    "precision": 1.0,
+    "fp_rate_traps": 0.0
+  },
+  "fp_by_kind": {},
+  "per_rule_recall": {
+    "GDPR-003": {
+      "caught": 1,
+      "total": 1,
+      "recall": 1.0
+    },
+    "GDPR-004": {
+      "caught": 1,
+      "total": 1,
+      "recall": 1.0
+    },
+    "HIPAA-001": {
+      "caught": 3,
+      "total": 3,
+      "recall": 1.0
+    },
+    "HIPAA-002": {
+      "caught": 7,
+      "total": 7,
+      "recall": 1.0
+    },
+    "HIPAA-003": {
+      "caught": 1,
+      "total": 1,
+      "recall": 1.0
+    },
+    "HIPAA-004": {
+      "caught": 2,
+      "total": 2,
+      "recall": 1.0
+    }
+  },
+  "missed_violations": [],
+  "false_positive_detail": [],
+  "borderline_calls": [
+    {
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 12,
+      "lean": "compliant",
+      "rationale": "Partially masked email: only the local part is truncated, domain is intact. Debatable whether truncation counts as adequate redaction.",
+      "flagged": false,
+      "rule_ids": []
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 13,
+      "lean": "compliant",
+      "rationale": "A 10-digit number matching the phone regex, framed as a shared department fax line rather than one named person's number. Debatable whether a departmental line is personal data.",
+      "flagged": false,
+      "rule_ids": []
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 14,
+      "lean": "compliant",
+      "rationale": "Initials only. Not a listed direct identifier under HIPAA Safe Harbor on its own, but could be linkable given other context.",
+      "flagged": false,
+      "rule_ids": []
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 16,
+      "lean": "violation",
+      "rationale": "A real-looking personal email inside a comment, not an executable literal. Debatable whether comments are in scope the same way code literals are.",
+      "flagged": true,
+      "rule_ids": [
+        "GDPR-001",
+        "HIPAA-001"
+      ]
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 20,
+      "lean": "compliant",
+      "rationale": "Logs a whole Patient object via %s formatting, which matches the 'whole object logged' violation pattern structurally -- but clinic.models.Patient marks every PHI field repr=False, so today this does not literally emit identifiers. Debatable because that safety is incidental to the call site, not guaranteed by it.",
+      "flagged": false,
+      "rule_ids": []
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 25,
+      "lean": "violation",
+      "rationale": "Exports a full 5-digit ZIP code (a census quasi-identifier) alongside an aggregate count. Not a 'direct identifier' as the rule defines it, but a de-identification purist would still flag it; HIPAA Safe Harbor requires 3-digit truncation for some areas.",
+      "flagged": false,
+      "rule_ids": []
+    }
+  ]
+}
