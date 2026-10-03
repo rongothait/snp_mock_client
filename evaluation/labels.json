@@ -1,0 +1,44 @@
+{
+  "description": "Ground truth for the privacy-agent evaluation benchmark. Violations are seeded lines that must be flagged; negatives are compliant lookalikes (false-positive traps) that must NOT be flagged. Any finding on an injected file that is not on a violation line is a false positive. rule_ids is the set of acceptable rule IDs for a line (HIPAA/GDPR rules overlap).",
+  "active_policies": ["hipaa", "gdpr"],
+  "line_tolerance": 0,
+  "injected_files": [
+    "clinic/integrations/telemetry.py",
+    "clinic/integrations/analytics.py",
+    "clinic/integrations/debug_routes.py",
+    "web/patient_portal.js"
+  ],
+  "violations": [
+    {"file": "clinic/integrations/telemetry.py", "line": 14, "rule_ids": ["HIPAA-001", "GDPR-001"], "expect": "maria.rossi@gmail.com", "note": "hardcoded name + real email"},
+    {"file": "clinic/integrations/telemetry.py", "line": 15, "rule_ids": ["HIPAA-001", "GDPR-001"], "expect": "+1-415-271-9930", "note": "hardcoded real phone number"},
+    {"file": "clinic/integrations/telemetry.py", "line": 21, "rule_ids": ["HIPAA-002", "GDPR-002"], "expect": "ingested reading for", "note": "whole patient object logged via f-string"},
+    {"file": "clinic/integrations/telemetry.py", "line": 22, "rule_ids": ["HIPAA-002", "GDPR-002"], "expect": "patient.email", "note": "email field logged"},
+    {"file": "clinic/integrations/analytics.py", "line": 7, "rule_ids": ["HIPAA-001", "GDPR-001"], "expect": "john.carter@gmail.com", "note": "hardcoded name + real email"},
+    {"file": "clinic/integrations/analytics.py", "line": 23, "rule_ids": ["HIPAA-004", "GDPR-004"], "expect": "p.ssn", "note": "export of direct identifiers + diagnosis"},
+    {"file": "clinic/integrations/analytics.py", "line": 27, "rule_ids": ["HIPAA-004", "GDPR-004"], "expect": "full_name", "note": "CSV export of personal fields"},
+    {"file": "clinic/integrations/analytics.py", "line": 31, "rule_ids": ["GDPR-004", "HIPAA-004", "GDPR-002"], "expect": "user.email", "note": "personal data sent to third-party analytics"},
+    {"file": "clinic/integrations/debug_routes.py", "line": 12, "rule_ids": ["HIPAA-003", "HIPAA-001"], "expect": "type 2 diabetes", "note": "hardcoded clinical narrative tied to a named person"},
+    {"file": "clinic/integrations/debug_routes.py", "line": 13, "rule_ids": ["GDPR-003", "HIPAA-003"], "expect": "hiv_status", "note": "special-category data literal"},
+    {"file": "clinic/integrations/debug_routes.py", "line": 18, "rule_ids": ["HIPAA-002", "GDPR-002"], "expect": "print(\"dump\", patient)", "note": "whole patient object printed"},
+    {"file": "clinic/integrations/debug_routes.py", "line": 19, "rule_ids": ["HIPAA-002", "GDPR-002"], "expect": "clinical_notes", "note": "clinical notes logged"},
+    {"file": "web/patient_portal.js", "line": 3, "rule_ids": ["HIPAA-002", "GDPR-002"], "expect": "console.log(user.email)", "note": "email logged to console"},
+    {"file": "web/patient_portal.js", "line": 4, "rule_ids": ["HIPAA-002", "GDPR-002"], "expect": "console.log(user)", "note": "whole user object logged"},
+    {"file": "web/patient_portal.js", "line": 8, "rule_ids": ["HIPAA-002", "GDPR-002"], "expect": "patient.diagnosis", "note": "MRN + diagnosis logged to console"}
+  ],
+  "negatives": [
+    {"file": "clinic/integrations/telemetry.py", "line": 9, "expect": "help@example.invalid", "note": "placeholder domain"},
+    {"file": "clinic/integrations/telemetry.py", "line": 10, "expect": "2024-01-01", "note": "timestamp, not an identifier"},
+    {"file": "clinic/integrations/telemetry.py", "line": 11, "expect": "1500000000", "note": "large number, not a phone"},
+    {"file": "clinic/integrations/telemetry.py", "line": 12, "expect": "555-0100", "note": "555 synthetic phone"},
+    {"file": "clinic/integrations/telemetry.py", "line": 19, "expect": "patient_id=%s", "note": "pseudonymous id log"},
+    {"file": "clinic/integrations/telemetry.py", "line": 20, "expect": "alerts_enabled=%s", "note": "boolean flag log"},
+    {"file": "clinic/integrations/analytics.py", "line": 8, "expect": "198.51.100.23", "note": "TEST-NET-2 reserved/documentation IP"},
+    {"file": "clinic/integrations/analytics.py", "line": 9, "expect": "192.0.2.10", "note": "TEST-NET-1 reserved/documentation IP"},
+    {"file": "clinic/integrations/analytics.py", "line": 10, "expect": "900000000", "note": "timeout number"},
+    {"file": "clinic/integrations/analytics.py", "line": 17, "expect": "p.pseudo_id", "note": "de-identified export"},
+    {"file": "clinic/integrations/debug_routes.py", "line": 9, "expect": "CONDITION_CODES", "note": "generic ICD code vocabulary"},
+    {"file": "clinic/integrations/debug_routes.py", "line": 10, "expect": "routine follow-up", "note": "generic note template, no person"},
+    {"file": "clinic/integrations/debug_routes.py", "line": 17, "expect": "server address", "note": "server bind address, not personal"},
+    {"file": "web/patient_portal.js", "line": 2, "expect": "login ok", "note": "pseudonymous id log"}
+  ]
+}

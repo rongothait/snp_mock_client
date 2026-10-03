@@ -1,0 +1,46 @@
+[
+  {
+    "bucket": "small_commit",
+    "files": 4,
+    "repeats": 30,
+    "prepare_scan": {
+      "mean_ms": 83.32,
+      "median_ms": 80.67,
+      "p95_ms": 97.45,
+      "min_ms": 77.3,
+      "max_ms": 152.87
+    },
+    "submit_findings_empty": {
+      "mean_ms": 111.43,
+      "median_ms": 110.94,
+      "p95_ms": 116.23,
+      "min_ms": 108.09,
+      "max_ms": 116.63
+    },
+    "cycle_mean_ms": 194.75,
+    "peak_memory_mb": 0.21,
+    "hint_count": 36
+  },
+  {
+    "bucket": "medium_commit",
+    "files": 15,
+    "repeats": 30,
+    "prepare_scan": {
+      "mean_ms": 85.99,
+      "median_ms": 85.68,
+      "p95_ms": 89.33,
+      "min_ms": 82.46,
+      "max_ms": 94.9
+    },
+    "submit_findings_empty": {
+      "mean_ms": 117.71,
+      "median_ms": 117.26,
+      "p95_ms": 120.83,
+      "min_ms": 115.49,
+      "max_ms": 122.05
+    },
+    "cycle_mean_ms": 203.7,
+    "peak_memory_mb": 0.22,
+    "hint_count": 135
+  }
+]
