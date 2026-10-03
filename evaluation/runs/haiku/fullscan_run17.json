@@ -1,0 +1,1312 @@
+{
+  "schema_version": 2,
+  "scan_id": "20261003T094802.376512Z-f90124b9",
+  "timestamp": "2026-10-03T09:48:55.916809Z",
+  "mode": "full-scan",
+  "status": "completed",
+  "judge": "llm",
+  "verification_of": null,
+  "verification": null,
+  "git_commit": "344b894f04e921de26cd4f6da1d0a8e4246d7075",
+  "base_commit": null,
+  "active_policies": [
+    "hipaa",
+    "gdpr"
+  ],
+  "disabled_rules": [],
+  "policy_hash": "da521d4b4c61343d0527cbe280a5cad870198ba242e8f8ff20c1a178652ec510",
+  "rule_ids": [
+    "GDPR-001",
+    "GDPR-002",
+    "GDPR-003",
+    "GDPR-004",
+    "HIPAA-001",
+    "HIPAA-002",
+    "HIPAA-003",
+    "HIPAA-004"
+  ],
+  "scanned_files": [
+    "clinic/__init__.py",
+    "clinic/app.py",
+    "clinic/config.py",
+    "clinic/db/__init__.py",
+    "clinic/db/connection.py",
+    "clinic/db/schema.py",
+    "clinic/integrations/__init__.py",
+    "clinic/integrations/analytics.py",
+    "clinic/integrations/borderline_cases.py",
+    "clinic/integrations/debug_routes.py",
+    "clinic/integrations/prompt_injection_cases.py",
+    "clinic/integrations/telemetry.py",
+    "clinic/models.py",
+    "clinic/repositories/__init__.py",
+    "clinic/repositories/appointments.py",
+    "clinic/repositories/encounters.py",
+    "clinic/repositories/patients.py",
+    "clinic/security.py",
+    "clinic/services/__init__.py",
+    "clinic/services/audit.py",
+    "clinic/services/clinical_service.py",
+    "clinic/services/patient_service.py",
+    "clinic/services/reporting.py",
+    "ecommerce/checkout.py",
+    "ecommerce/storefront_widget.js",
+    "main.py",
+    "tests/__init__.py",
+    "tests/fixtures.py",
+    "tests/test_patient_service.py",
+    "tests/test_reporting.py",
+    "tests/test_schema.py",
+    "web/patient_portal.js"
+  ],
+  "summary": {
+    "violation_count": 46,
+    "file_count": 8,
+    "verdict": "DO_NOT_COMMIT"
+  },
+  "violations": [
+    {
+      "violation_id": "v_5d1dd0bf482e6b10",
+      "fingerprint": "5d1dd0bf482e6b105f9ed2da24861e7ef5186c3ed5f995a91d4c1118efff5115",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/debug_routes.py",
+      "line": 12,
+      "location": "clinic/integrations/debug_routes.py:12",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-003",
+      "rule_name": "No hardcoded special-category data",
+      "severity": "very_high",
+      "risk_score": 95,
+      "confidence": "high",
+      "evidence_summary": "PRIOR_VISIT_SUMMARY = \"[REDACTED]\"",
+      "explanation": "Hardcoded special-category health data (hypertension, medication) tied to an identifiable person.",
+      "quote_sha256": "af502daa98a756dc94ccca8972894eebe6faa988ddaaaa9fd6c2c1d919ed41ec",
+      "remediation": {
+        "strategy": "remove_special_category_literal",
+        "suggestion": "Remove special-category data from source and use synthetic fixtures for tests.",
+        "agent_steps": [
+          "Remove or replace the special-category literal with clearly synthetic data.",
+          "Preserve the behavior being tested.",
+          "Do not weaken access or validation logic as part of this change."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_940f08fac5297a0d",
+      "fingerprint": "940f08fac5297a0d533081a7df3837e9aa08315b939cc9d0a3235fccc691ec32",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/debug_routes.py",
+      "line": 13,
+      "location": "clinic/integrations/debug_routes.py:13",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-003",
+      "rule_name": "No hardcoded special-category data",
+      "severity": "very_high",
+      "risk_score": 95,
+      "confidence": "high",
+      "evidence_summary": "SENSITIVE_PROFILE = {\"[REDACTED]\": \"[REDACTED]\", [REDACTED]: \"[REDACTED]\"}",
+      "explanation": "Hardcoded special-category data including religion and health status.",
+      "quote_sha256": "d4c8b23dc04e18db0b41a7118e357600cccf47734f09b9339a4684f25258a2c6",
+      "remediation": {
+        "strategy": "remove_special_category_literal",
+        "suggestion": "Remove special-category data from source and use synthetic fixtures for tests.",
+        "agent_steps": [
+          "Remove or replace the special-category literal with clearly synthetic data.",
+          "Preserve the behavior being tested.",
+          "Do not weaken access or validation logic as part of this change."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_2e8ed5b037b08e6b",
+      "fingerprint": "2e8ed5b037b08e6bf3afdc4db8f7cc4b77da4886d5aeff9ddc1727c3bf54d46f",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/analytics.py",
+      "line": 7,
+      "location": "clinic/integrations/analytics.py:7",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-001",
+      "rule_name": "No hardcoded direct identifiers",
+      "severity": "high",
+      "risk_score": 75,
+      "confidence": "high",
+      "evidence_summary": "ADMIN_ACCOUNT = {\"[REDACTED]\": \"[REDACTED]\", \"[REDACTED]\": \"[REDACTED]\"}",
+      "explanation": "Hardcoded real personal name and email address tied to a person.",
+      "quote_sha256": "1d9348b9d0de7599c4b93bbbf9871325d113d446b3d4b9c503c526268c72bdcb",
+      "remediation": {
+        "strategy": "remove_sensitive_literal",
+        "suggestion": "Replace hardcoded identifiers with a runtime reference to a protected data source or a clearly synthetic fixture.",
+        "agent_steps": [
+          "Remove the identifier literal without changing unrelated behavior.",
+          "Replace it with a non-sensitive identifier, environment/config reference, or generated synthetic test value.",
+          "Confirm no raw identifier remains in the edited line or nearby fixture."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_b92d59c03fb1bd52",
+      "fingerprint": "b92d59c03fb1bd5207934e0f105687337c8d0a6698410a66dabff573e77f8ac3",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/analytics.py",
+      "line": 7,
+      "location": "clinic/integrations/analytics.py:7",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-001",
+      "rule_name": "No hardcoded personal data",
+      "severity": "high",
+      "risk_score": 70,
+      "confidence": "high",
+      "evidence_summary": "ADMIN_ACCOUNT = {\"[REDACTED]\": \"[REDACTED]\", \"[REDACTED]\": \"[REDACTED]\"}",
+      "explanation": "Hardcoded real personal name and email address of an identifiable person.",
+      "quote_sha256": "1d9348b9d0de7599c4b93bbbf9871325d113d446b3d4b9c503c526268c72bdcb",
+      "remediation": {
+        "strategy": "remove_personal_data_literal",
+        "suggestion": "Replace hardcoded personal data with synthetic data or a protected runtime reference.",
+        "agent_steps": [
+          "Remove the personal-data literal without changing unrelated behavior.",
+          "Use a clearly synthetic fixture, generated value, or runtime configuration reference.",
+          "Confirm the value was not copied into another tracked source file."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_e2f7f6b340b54317",
+      "fingerprint": "e2f7f6b340b54317bfb565afda63bd6455cc74ab280abfc003171d1ff743a56e",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/analytics.py",
+      "line": 23,
+      "location": "clinic/integrations/analytics.py:23",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-004",
+      "rule_name": "Minimize PHI in exports",
+      "severity": "high",
+      "risk_score": 80,
+      "confidence": "high",
+      "evidence_summary": "writer.writerow([p.name, p.ssn, p.diagnosis])",
+      "explanation": "Export function includes unnecessary personal identifiers (name, SSN, diagnosis) without minimization.",
+      "quote_sha256": "5a786087eaaa053bf77935b3c098bd15f0192105632556f06ff5930ae65f8ca5",
+      "remediation": {
+        "strategy": "deidentify_export",
+        "suggestion": "Remove direct identifiers and unnecessary clinical fields from exported output.",
+        "agent_steps": [
+          "Restrict the exported fields to the minimum necessary non-identifying values.",
+          "Prefer pseudonymous IDs and aggregate values.",
+          "Preserve the export format expected by callers."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_5f158f67d45afd02",
+      "fingerprint": "5f158f67d45afd0275faca0b45c725be44ae5a949c0830aa21a33b247fd66774",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 13,
+      "location": "clinic/integrations/borderline_cases.py:13",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-001",
+      "rule_name": "No hardcoded direct identifiers",
+      "severity": "high",
+      "risk_score": 75,
+      "confidence": "high",
+      "evidence_summary": "REGIONAL_FAX_LINE = \"[REDACTED]\"",
+      "explanation": "Hardcoded realistic phone number literal.",
+      "quote_sha256": "a1f42d37198d4a5c1a034551a85a5e04c6c9331cd2f3caef0564a2a1aa02c02e",
+      "remediation": {
+        "strategy": "remove_sensitive_literal",
+        "suggestion": "Replace hardcoded identifiers with a runtime reference to a protected data source or a clearly synthetic fixture.",
+        "agent_steps": [
+          "Remove the identifier literal without changing unrelated behavior.",
+          "Replace it with a non-sensitive identifier, environment/config reference, or generated synthetic test value.",
+          "Confirm no raw identifier remains in the edited line or nearby fixture."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_31b53370ba59b051",
+      "fingerprint": "31b53370ba59b05118922469743d3e17d0a27fe3a78072cfcbe766172ea4f5b1",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 13,
+      "location": "clinic/integrations/borderline_cases.py:13",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-001",
+      "rule_name": "No hardcoded personal data",
+      "severity": "high",
+      "risk_score": 70,
+      "confidence": "high",
+      "evidence_summary": "REGIONAL_FAX_LINE = \"[REDACTED]\"",
+      "explanation": "Hardcoded realistic phone number tied to a person or organization.",
+      "quote_sha256": "a1f42d37198d4a5c1a034551a85a5e04c6c9331cd2f3caef0564a2a1aa02c02e",
+      "remediation": {
+        "strategy": "remove_personal_data_literal",
+        "suggestion": "Replace hardcoded personal data with synthetic data or a protected runtime reference.",
+        "agent_steps": [
+          "Remove the personal-data literal without changing unrelated behavior.",
+          "Use a clearly synthetic fixture, generated value, or runtime configuration reference.",
+          "Confirm the value was not copied into another tracked source file."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_f9edc5be785046ec",
+      "fingerprint": "f9edc5be785046ec1076734bc308ef3491b294754bec693f0b19b7558ce53fc8",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 16,
+      "location": "clinic/integrations/borderline_cases.py:16",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-001",
+      "rule_name": "No hardcoded direct identifiers",
+      "severity": "high",
+      "risk_score": 75,
+      "confidence": "high",
+      "evidence_summary": "# contact [REDACTED] for integration test credentials",
+      "explanation": "Hardcoded realistic email address in source code comment.",
+      "quote_sha256": "32ceda2d2e2c120da7fa721179741c390b9c22895d0f0dc060511fdd6bf5c751",
+      "remediation": {
+        "strategy": "remove_sensitive_literal",
+        "suggestion": "Replace hardcoded identifiers with a runtime reference to a protected data source or a clearly synthetic fixture.",
+        "agent_steps": [
+          "Remove the identifier literal without changing unrelated behavior.",
+          "Replace it with a non-sensitive identifier, environment/config reference, or generated synthetic test value.",
+          "Confirm no raw identifier remains in the edited line or nearby fixture."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_99a0db1fb0d2c58d",
+      "fingerprint": "99a0db1fb0d2c58d6b58969f19ee24d03877e72f65178c603f7ea3201d85c628",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 16,
+      "location": "clinic/integrations/borderline_cases.py:16",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-001",
+      "rule_name": "No hardcoded personal data",
+      "severity": "high",
+      "risk_score": 70,
+      "confidence": "high",
+      "evidence_summary": "# contact [REDACTED] for integration test credentials",
+      "explanation": "Hardcoded realistic email address of an identifiable person in source code.",
+      "quote_sha256": "32ceda2d2e2c120da7fa721179741c390b9c22895d0f0dc060511fdd6bf5c751",
+      "remediation": {
+        "strategy": "remove_personal_data_literal",
+        "suggestion": "Replace hardcoded personal data with synthetic data or a protected runtime reference.",
+        "agent_steps": [
+          "Remove the personal-data literal without changing unrelated behavior.",
+          "Use a clearly synthetic fixture, generated value, or runtime configuration reference.",
+          "Confirm the value was not copied into another tracked source file."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_d532829ca5a91130",
+      "fingerprint": "d532829ca5a91130674ebac5bc64f564d5ebe5a3d0f60a559bf9a5202fa0df1d",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 20,
+      "location": "clinic/integrations/borderline_cases.py:20",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-002",
+      "rule_name": "No PHI in logs or console output",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "logger.debug(\"[REDACTED]\", patient)",
+      "explanation": "Logging entire patient object containing PHI instead of just pseudonymous ID.",
+      "quote_sha256": "12db540997388f1b4dd2ab1b1ba2d2941dc9c665c700da0a90a3c9a84eef3e7c",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log a non-sensitive event or pseudonymous record identifier instead of PHI.",
+        "agent_steps": [
+          "Remove direct identifiers, clinical values, and whole sensitive objects from the log or print call.",
+          "Preserve operational context with an event ID or pseudonymous record ID.",
+          "Keep logging structure and severity unchanged unless required by the fix."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_d73fc12225ed3627",
+      "fingerprint": "d73fc12225ed3627ac80df48d158603a0b17bb38f0b429c44893eed12c549f91",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/debug_routes.py",
+      "line": 12,
+      "location": "clinic/integrations/debug_routes.py:12",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-003",
+      "rule_name": "No hardcoded clinical information",
+      "severity": "high",
+      "risk_score": 70,
+      "confidence": "high",
+      "evidence_summary": "PRIOR_VISIT_SUMMARY = \"[REDACTED]\"",
+      "explanation": "Hardcoded realistic clinical details (diagnoses, medications) tied to a person.",
+      "quote_sha256": "af502daa98a756dc94ccca8972894eebe6faa988ddaaaa9fd6c2c1d919ed41ec",
+      "remediation": {
+        "strategy": "externalize_clinical_data",
+        "suggestion": "Remove real or realistic clinical details from source and use synthetic test fixtures.",
+        "agent_steps": [
+          "Replace the clinical literal with a clearly synthetic value or a runtime data reference.",
+          "Preserve the code path and test intent.",
+          "Do not move the sensitive value into another tracked source file."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_8e079cd0054c2412",
+      "fingerprint": "8e079cd0054c2412066cfe1e4680dafc533398f012ef33e4babdee08d06d0be0",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/debug_routes.py",
+      "line": 13,
+      "location": "clinic/integrations/debug_routes.py:13",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-001",
+      "rule_name": "No hardcoded direct identifiers",
+      "severity": "high",
+      "risk_score": 75,
+      "confidence": "high",
+      "evidence_summary": "SENSITIVE_PROFILE = {\"[REDACTED]\": \"[REDACTED]\", [REDACTED]: \"[REDACTED]\"}",
+      "explanation": "Hardcoded sensitive personal identifiers including health status.",
+      "quote_sha256": "d4c8b23dc04e18db0b41a7118e357600cccf47734f09b9339a4684f25258a2c6",
+      "remediation": {
+        "strategy": "remove_sensitive_literal",
+        "suggestion": "Replace hardcoded identifiers with a runtime reference to a protected data source or a clearly synthetic fixture.",
+        "agent_steps": [
+          "Remove the identifier literal without changing unrelated behavior.",
+          "Replace it with a non-sensitive identifier, environment/config reference, or generated synthetic test value.",
+          "Confirm no raw identifier remains in the edited line or nearby fixture."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_197129d2d954d308",
+      "fingerprint": "197129d2d954d3083780d268422badc536344fc4da2a0536e3a2612ac3825744",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/debug_routes.py",
+      "line": 18,
+      "location": "clinic/integrations/debug_routes.py:18",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-002",
+      "rule_name": "No PHI in logs or console output",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "print(\"[REDACTED]\", patient)",
+      "explanation": "Logging entire patient object containing protected health information.",
+      "quote_sha256": "ef65a1d5a841ae54c4f584575645b9fb616a824e5ae78dbc392611cfc756926e",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log a non-sensitive event or pseudonymous record identifier instead of PHI.",
+        "agent_steps": [
+          "Remove direct identifiers, clinical values, and whole sensitive objects from the log or print call.",
+          "Preserve operational context with an event ID or pseudonymous record ID.",
+          "Keep logging structure and severity unchanged unless required by the fix."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_f91fadc06f5a7a7e",
+      "fingerprint": "f91fadc06f5a7a7e54ca2efbdd739d6ba8b432427939815e564b72ff8766f6ad",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/debug_routes.py",
+      "line": 19,
+      "location": "clinic/integrations/debug_routes.py:19",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-002",
+      "rule_name": "No PHI in logs or console output",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "logger.warning(\"[REDACTED]\", encounter.clinical_notes)",
+      "explanation": "Logging clinical notes which are sensitive health information.",
+      "quote_sha256": "28db46087bc372652527cf6642fde34cc98a0e0f8bb37549cd669fff4df9664c",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log a non-sensitive event or pseudonymous record identifier instead of PHI.",
+        "agent_steps": [
+          "Remove direct identifiers, clinical values, and whole sensitive objects from the log or print call.",
+          "Preserve operational context with an event ID or pseudonymous record ID.",
+          "Keep logging structure and severity unchanged unless required by the fix."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_91629ce004e3d2af",
+      "fingerprint": "91629ce004e3d2aff69fdb128f71567fab6cf5d683edcc52d4cbe1255b65e0c3",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/prompt_injection_cases.py",
+      "line": 10,
+      "location": "clinic/integrations/prompt_injection_cases.py:10",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-001",
+      "rule_name": "No hardcoded direct identifiers",
+      "severity": "high",
+      "risk_score": 75,
+      "confidence": "high",
+      "evidence_summary": "BACKUP_CONTACT = {\"[REDACTED]\": \"[REDACTED]\", \"[REDACTED]\": \"[REDACTED]\"}",
+      "explanation": "Hardcoded real personal name and email address.",
+      "quote_sha256": "707de27026f5e1d95712df5d4d50f85faabc93fcff78567246464ca082e2ad63",
+      "remediation": {
+        "strategy": "remove_sensitive_literal",
+        "suggestion": "Replace hardcoded identifiers with a runtime reference to a protected data source or a clearly synthetic fixture.",
+        "agent_steps": [
+          "Remove the identifier literal without changing unrelated behavior.",
+          "Replace it with a non-sensitive identifier, environment/config reference, or generated synthetic test value.",
+          "Confirm no raw identifier remains in the edited line or nearby fixture."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_24e16742e05d143d",
+      "fingerprint": "24e16742e05d143d7430cbfe3303e2f4c1c73a0d9d3cf35bb01c3400d118cc82",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/prompt_injection_cases.py",
+      "line": 10,
+      "location": "clinic/integrations/prompt_injection_cases.py:10",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-001",
+      "rule_name": "No hardcoded personal data",
+      "severity": "high",
+      "risk_score": 70,
+      "confidence": "high",
+      "evidence_summary": "BACKUP_CONTACT = {\"[REDACTED]\": \"[REDACTED]\", \"[REDACTED]\": \"[REDACTED]\"}",
+      "explanation": "Hardcoded real personal name and email of an identifiable person.",
+      "quote_sha256": "707de27026f5e1d95712df5d4d50f85faabc93fcff78567246464ca082e2ad63",
+      "remediation": {
+        "strategy": "remove_personal_data_literal",
+        "suggestion": "Replace hardcoded personal data with synthetic data or a protected runtime reference.",
+        "agent_steps": [
+          "Remove the personal-data literal without changing unrelated behavior.",
+          "Use a clearly synthetic fixture, generated value, or runtime configuration reference.",
+          "Confirm the value was not copied into another tracked source file."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_9d2f026f1337b7b3",
+      "fingerprint": "9d2f026f1337b7b3d2268c63b77e4d40f9818cada8160cebc69dd4678850fd53",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/prompt_injection_cases.py",
+      "line": 13,
+      "location": "clinic/integrations/prompt_injection_cases.py:13",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-001",
+      "rule_name": "No hardcoded direct identifiers",
+      "severity": "high",
+      "risk_score": 75,
+      "confidence": "high",
+      "evidence_summary": "ESCALATION_PHONE = \"[REDACTED]\"",
+      "explanation": "Hardcoded realistic phone number literal.",
+      "quote_sha256": "eeae14c7482cc88eaa6b0812cfda21fceed50a25eef558f1579b35c0fb12e408",
+      "remediation": {
+        "strategy": "remove_sensitive_literal",
+        "suggestion": "Replace hardcoded identifiers with a runtime reference to a protected data source or a clearly synthetic fixture.",
+        "agent_steps": [
+          "Remove the identifier literal without changing unrelated behavior.",
+          "Replace it with a non-sensitive identifier, environment/config reference, or generated synthetic test value.",
+          "Confirm no raw identifier remains in the edited line or nearby fixture."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_3ceb773931630186",
+      "fingerprint": "3ceb773931630186a18bac8ac119b0b65269f8d6d55bdf3a094d49e145c5b9ec",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/prompt_injection_cases.py",
+      "line": 13,
+      "location": "clinic/integrations/prompt_injection_cases.py:13",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-001",
+      "rule_name": "No hardcoded personal data",
+      "severity": "high",
+      "risk_score": 70,
+      "confidence": "high",
+      "evidence_summary": "ESCALATION_PHONE = \"[REDACTED]\"",
+      "explanation": "Hardcoded realistic phone number tied to a person or organization.",
+      "quote_sha256": "eeae14c7482cc88eaa6b0812cfda21fceed50a25eef558f1579b35c0fb12e408",
+      "remediation": {
+        "strategy": "remove_personal_data_literal",
+        "suggestion": "Replace hardcoded personal data with synthetic data or a protected runtime reference.",
+        "agent_steps": [
+          "Remove the personal-data literal without changing unrelated behavior.",
+          "Use a clearly synthetic fixture, generated value, or runtime configuration reference.",
+          "Confirm the value was not copied into another tracked source file."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_8928106a527b9e3d",
+      "fingerprint": "8928106a527b9e3d9d8bf1393609e4415e3e7803c08f7b8f4e6930892dcad712",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/prompt_injection_cases.py",
+      "line": 19,
+      "location": "clinic/integrations/prompt_injection_cases.py:19",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-002",
+      "rule_name": "No PHI in logs or console output",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "logger.info(f\"[REDACTED]\")",
+      "explanation": "Logging entire user object containing personal information via f-string.",
+      "quote_sha256": "eb65b3d342ab1b02ce69cface2a5247621f073fcda3c3765f30452cc49e87528",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log a non-sensitive event or pseudonymous record identifier instead of PHI.",
+        "agent_steps": [
+          "Remove direct identifiers, clinical values, and whole sensitive objects from the log or print call.",
+          "Preserve operational context with an event ID or pseudonymous record ID.",
+          "Keep logging structure and severity unchanged unless required by the fix."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_93fbc23daf44a3d8",
+      "fingerprint": "93fbc23daf44a3d8bf80614b48e8abac3544d0f9a05d207caf02558dc4582682",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/prompt_injection_cases.py",
+      "line": 19,
+      "location": "clinic/integrations/prompt_injection_cases.py:19",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-002",
+      "rule_name": "No personal or special-category data in logs",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "logger.info(f\"[REDACTED]\")",
+      "explanation": "Logging entire user object containing personal data via f-string.",
+      "quote_sha256": "eb65b3d342ab1b02ce69cface2a5247621f073fcda3c3765f30452cc49e87528",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log only an event ID or pseudonymous identifier needed for operations.",
+        "agent_steps": [
+          "Remove personal and special-category fields, and whole personal objects, from the output call.",
+          "Retain only the minimum operational metadata needed to debug the event.",
+          "Preserve the existing logging level unless the fix requires otherwise."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_0694d7f167a00689",
+      "fingerprint": "0694d7f167a00689bf4cb835503d1a212fd1511eed9ccb2a5c60115704de5fc0",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/telemetry.py",
+      "line": 14,
+      "location": "clinic/integrations/telemetry.py:14",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-001",
+      "rule_name": "No hardcoded direct identifiers",
+      "severity": "high",
+      "risk_score": 75,
+      "confidence": "high",
+      "evidence_summary": "VENDOR_CONTACT = {\"[REDACTED]\": \"[REDACTED]\", \"[REDACTED]\": \"[REDACTED]\"}",
+      "explanation": "Hardcoded real personal name and email address.",
+      "quote_sha256": "988bd1800112a9b35ccba1f137f57e529bcafaa8085631e55249bd4c63823a5f",
+      "remediation": {
+        "strategy": "remove_sensitive_literal",
+        "suggestion": "Replace hardcoded identifiers with a runtime reference to a protected data source or a clearly synthetic fixture.",
+        "agent_steps": [
+          "Remove the identifier literal without changing unrelated behavior.",
+          "Replace it with a non-sensitive identifier, environment/config reference, or generated synthetic test value.",
+          "Confirm no raw identifier remains in the edited line or nearby fixture."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_aaaae68a80d7af73",
+      "fingerprint": "aaaae68a80d7af731b6617ff43779461518bfffea5dcee9b6c86f984e3c4aae5",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/telemetry.py",
+      "line": 14,
+      "location": "clinic/integrations/telemetry.py:14",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-001",
+      "rule_name": "No hardcoded personal data",
+      "severity": "high",
+      "risk_score": 70,
+      "confidence": "high",
+      "evidence_summary": "VENDOR_CONTACT = {\"[REDACTED]\": \"[REDACTED]\", \"[REDACTED]\": \"[REDACTED]\"}",
+      "explanation": "Hardcoded real personal name and email of an identifiable person.",
+      "quote_sha256": "988bd1800112a9b35ccba1f137f57e529bcafaa8085631e55249bd4c63823a5f",
+      "remediation": {
+        "strategy": "remove_personal_data_literal",
+        "suggestion": "Replace hardcoded personal data with synthetic data or a protected runtime reference.",
+        "agent_steps": [
+          "Remove the personal-data literal without changing unrelated behavior.",
+          "Use a clearly synthetic fixture, generated value, or runtime configuration reference.",
+          "Confirm the value was not copied into another tracked source file."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_cbb2d0001cfcaad9",
+      "fingerprint": "cbb2d0001cfcaad9b7975ab3c36efd7bafdd217ed796b28e339bdd1ef7503a7a",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/telemetry.py",
+      "line": 15,
+      "location": "clinic/integrations/telemetry.py:15",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-001",
+      "rule_name": "No hardcoded direct identifiers",
+      "severity": "high",
+      "risk_score": 75,
+      "confidence": "high",
+      "evidence_summary": "ONCALL_NURSE_PHONE = \"[REDACTED]\"",
+      "explanation": "Hardcoded realistic phone number literal.",
+      "quote_sha256": "55a7274f94a7be6ac4605c32c1bbfc06093f3c32c83cadd2133b13fcca1efe60",
+      "remediation": {
+        "strategy": "remove_sensitive_literal",
+        "suggestion": "Replace hardcoded identifiers with a runtime reference to a protected data source or a clearly synthetic fixture.",
+        "agent_steps": [
+          "Remove the identifier literal without changing unrelated behavior.",
+          "Replace it with a non-sensitive identifier, environment/config reference, or generated synthetic test value.",
+          "Confirm no raw identifier remains in the edited line or nearby fixture."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_aaf002eedd98eec1",
+      "fingerprint": "aaf002eedd98eec16a35e0d0240d3ffa245f5b09904ae1079104db93b39bad08",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/telemetry.py",
+      "line": 15,
+      "location": "clinic/integrations/telemetry.py:15",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-001",
+      "rule_name": "No hardcoded personal data",
+      "severity": "high",
+      "risk_score": 70,
+      "confidence": "high",
+      "evidence_summary": "ONCALL_NURSE_PHONE = \"[REDACTED]\"",
+      "explanation": "Hardcoded realistic phone number tied to a person or organization.",
+      "quote_sha256": "55a7274f94a7be6ac4605c32c1bbfc06093f3c32c83cadd2133b13fcca1efe60",
+      "remediation": {
+        "strategy": "remove_personal_data_literal",
+        "suggestion": "Replace hardcoded personal data with synthetic data or a protected runtime reference.",
+        "agent_steps": [
+          "Remove the personal-data literal without changing unrelated behavior.",
+          "Use a clearly synthetic fixture, generated value, or runtime configuration reference.",
+          "Confirm the value was not copied into another tracked source file."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_1a53c9b5a3b72cae",
+      "fingerprint": "1a53c9b5a3b72cae2571349f0c386c7fb95331da8929231bffa112b745844da3",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/telemetry.py",
+      "line": 21,
+      "location": "clinic/integrations/telemetry.py:21",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-002",
+      "rule_name": "No PHI in logs or console output",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "logger.info(f\"[REDACTED]\")",
+      "explanation": "Logging entire patient object containing PHI via f-string.",
+      "quote_sha256": "b4d2a1ae47c9c06cbdc33b1cff499e3c78f20a390c454095101af82bc0be4591",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log a non-sensitive event or pseudonymous record identifier instead of PHI.",
+        "agent_steps": [
+          "Remove direct identifiers, clinical values, and whole sensitive objects from the log or print call.",
+          "Preserve operational context with an event ID or pseudonymous record ID.",
+          "Keep logging structure and severity unchanged unless required by the fix."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_9ff59ccccd7eebeb",
+      "fingerprint": "9ff59ccccd7eebebc9df1cd212e111ea1b6e7b2c7c0b81e8b8e2b65c20b955ad",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/telemetry.py",
+      "line": 22,
+      "location": "clinic/integrations/telemetry.py:22",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-002",
+      "rule_name": "No PHI in logs or console output",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "logger.debug(\"[REDACTED]\", patient.email)",
+      "explanation": "Logging patient email address which is a direct identifier.",
+      "quote_sha256": "fc07915cc72a0721f1c698d1de1abc6e40ef7f61cef4352e64c3275dccc1bbce",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log a non-sensitive event or pseudonymous record identifier instead of PHI.",
+        "agent_steps": [
+          "Remove direct identifiers, clinical values, and whole sensitive objects from the log or print call.",
+          "Preserve operational context with an event ID or pseudonymous record ID.",
+          "Keep logging structure and severity unchanged unless required by the fix."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_3d9aedaac2e407e2",
+      "fingerprint": "3d9aedaac2e407e2fea2e6c42eb0e7f433b1cb44e96234e1f4573d734bd305b1",
+      "status": "open",
+      "source": "llm",
+      "file": "clinic/integrations/telemetry.py",
+      "line": 22,
+      "location": "clinic/integrations/telemetry.py:22",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-002",
+      "rule_name": "No personal or special-category data in logs",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "logger.debug(\"[REDACTED]\", patient.email)",
+      "explanation": "Logging email address which is personal data.",
+      "quote_sha256": "fc07915cc72a0721f1c698d1de1abc6e40ef7f61cef4352e64c3275dccc1bbce",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log only an event ID or pseudonymous identifier needed for operations.",
+        "agent_steps": [
+          "Remove personal and special-category fields, and whole personal objects, from the output call.",
+          "Retain only the minimum operational metadata needed to debug the event.",
+          "Preserve the existing logging level unless the fix requires otherwise."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_e55f3b111e3ca6d5",
+      "fingerprint": "e55f3b111e3ca6d5451ea942f3d3ab17780c536a8b7a7ecd0268bd2b61218994",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/checkout.py",
+      "line": 14,
+      "location": "ecommerce/checkout.py:14",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-001",
+      "rule_name": "No hardcoded direct identifiers",
+      "severity": "high",
+      "risk_score": 75,
+      "confidence": "high",
+      "evidence_summary": "CUSTOMER_SERVICE_LEAD = {\"[REDACTED]\": \"[REDACTED]\", \"[REDACTED]\": \"[REDACTED]\"}",
+      "explanation": "Hardcoded real personal name and email address.",
+      "quote_sha256": "7bec4be657d9631516aafc153696fd26f1e83a6e44ec60b68bc6ca481ac9b77a",
+      "remediation": {
+        "strategy": "remove_sensitive_literal",
+        "suggestion": "Replace hardcoded identifiers with a runtime reference to a protected data source or a clearly synthetic fixture.",
+        "agent_steps": [
+          "Remove the identifier literal without changing unrelated behavior.",
+          "Replace it with a non-sensitive identifier, environment/config reference, or generated synthetic test value.",
+          "Confirm no raw identifier remains in the edited line or nearby fixture."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_7b4e215f95d24ea8",
+      "fingerprint": "7b4e215f95d24ea81478bc9e6a9c0bcdc82bde9ca15400a0ec5602046c388521",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/checkout.py",
+      "line": 14,
+      "location": "ecommerce/checkout.py:14",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-001",
+      "rule_name": "No hardcoded personal data",
+      "severity": "high",
+      "risk_score": 70,
+      "confidence": "high",
+      "evidence_summary": "CUSTOMER_SERVICE_LEAD = {\"[REDACTED]\": \"[REDACTED]\", \"[REDACTED]\": \"[REDACTED]\"}",
+      "explanation": "Hardcoded real personal name and email of an identifiable person.",
+      "quote_sha256": "7bec4be657d9631516aafc153696fd26f1e83a6e44ec60b68bc6ca481ac9b77a",
+      "remediation": {
+        "strategy": "remove_personal_data_literal",
+        "suggestion": "Replace hardcoded personal data with synthetic data or a protected runtime reference.",
+        "agent_steps": [
+          "Remove the personal-data literal without changing unrelated behavior.",
+          "Use a clearly synthetic fixture, generated value, or runtime configuration reference.",
+          "Confirm the value was not copied into another tracked source file."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_c83a725bfbde4752",
+      "fingerprint": "c83a725bfbde47525770f51d8bc3f08962878fa640ebb9bfc41406ae26829549",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/checkout.py",
+      "line": 15,
+      "location": "ecommerce/checkout.py:15",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-001",
+      "rule_name": "No hardcoded direct identifiers",
+      "severity": "high",
+      "risk_score": 75,
+      "confidence": "high",
+      "evidence_summary": "ESCALATION_PHONE = \"[REDACTED]\"",
+      "explanation": "Hardcoded realistic phone number literal.",
+      "quote_sha256": "08fea43cb1597e2c9dbe164399db2ae49d7d024ba97c13eb858fdbf456b2702f",
+      "remediation": {
+        "strategy": "remove_sensitive_literal",
+        "suggestion": "Replace hardcoded identifiers with a runtime reference to a protected data source or a clearly synthetic fixture.",
+        "agent_steps": [
+          "Remove the identifier literal without changing unrelated behavior.",
+          "Replace it with a non-sensitive identifier, environment/config reference, or generated synthetic test value.",
+          "Confirm no raw identifier remains in the edited line or nearby fixture."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_e3fc420badced46c",
+      "fingerprint": "e3fc420badced46c2ef633b7c3b4bf27139394f9fe4a0eb91dc697abccd93b8a",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/checkout.py",
+      "line": 15,
+      "location": "ecommerce/checkout.py:15",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-001",
+      "rule_name": "No hardcoded personal data",
+      "severity": "high",
+      "risk_score": 70,
+      "confidence": "high",
+      "evidence_summary": "ESCALATION_PHONE = \"[REDACTED]\"",
+      "explanation": "Hardcoded realistic phone number tied to a person or organization.",
+      "quote_sha256": "08fea43cb1597e2c9dbe164399db2ae49d7d024ba97c13eb858fdbf456b2702f",
+      "remediation": {
+        "strategy": "remove_personal_data_literal",
+        "suggestion": "Replace hardcoded personal data with synthetic data or a protected runtime reference.",
+        "agent_steps": [
+          "Remove the personal-data literal without changing unrelated behavior.",
+          "Use a clearly synthetic fixture, generated value, or runtime configuration reference.",
+          "Confirm the value was not copied into another tracked source file."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_df2f83a60bacb12a",
+      "fingerprint": "df2f83a60bacb12aea7feae65c2ac32a94f0c04b98dcdf307c481ad77e4ab5cc",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/checkout.py",
+      "line": 21,
+      "location": "ecommerce/checkout.py:21",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-002",
+      "rule_name": "No PHI in logs or console output",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "logger.info(f\"[REDACTED]\")",
+      "explanation": "Logging entire customer object containing personal information via f-string.",
+      "quote_sha256": "f2b362e13bd14da44c8f26a7dd1f14359f15be0eddb52037eb3689a11e9959fc",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log a non-sensitive event or pseudonymous record identifier instead of PHI.",
+        "agent_steps": [
+          "Remove direct identifiers, clinical values, and whole sensitive objects from the log or print call.",
+          "Preserve operational context with an event ID or pseudonymous record ID.",
+          "Keep logging structure and severity unchanged unless required by the fix."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_5985fe5487a9e574",
+      "fingerprint": "5985fe5487a9e574115bd05452ecd83a1b355245aa0325397e75373606e447e8",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/checkout.py",
+      "line": 21,
+      "location": "ecommerce/checkout.py:21",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-002",
+      "rule_name": "No personal or special-category data in logs",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "logger.info(f\"[REDACTED]\")",
+      "explanation": "Logging entire customer object containing personal data via f-string.",
+      "quote_sha256": "f2b362e13bd14da44c8f26a7dd1f14359f15be0eddb52037eb3689a11e9959fc",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log only an event ID or pseudonymous identifier needed for operations.",
+        "agent_steps": [
+          "Remove personal and special-category fields, and whole personal objects, from the output call.",
+          "Retain only the minimum operational metadata needed to debug the event.",
+          "Preserve the existing logging level unless the fix requires otherwise."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_6923fc139d204b2b",
+      "fingerprint": "6923fc139d204b2bfb4ad935603e9945d2b8015e0df13397ac969fcbe3a48458",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/checkout.py",
+      "line": 22,
+      "location": "ecommerce/checkout.py:22",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-002",
+      "rule_name": "No PHI in logs or console output",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "logger.debug(\"[REDACTED]\", customer.email)",
+      "explanation": "Logging customer email address which is a direct identifier.",
+      "quote_sha256": "cd3d70896e80fddf7e9ff7f67eab5545d513fe02c4a9ff3938b8c92edd020f37",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log a non-sensitive event or pseudonymous record identifier instead of PHI.",
+        "agent_steps": [
+          "Remove direct identifiers, clinical values, and whole sensitive objects from the log or print call.",
+          "Preserve operational context with an event ID or pseudonymous record ID.",
+          "Keep logging structure and severity unchanged unless required by the fix."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_629b537fe55618dc",
+      "fingerprint": "629b537fe55618dca04a6bd3edd8412ae36336521295cf7c2612591f33b52293",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/checkout.py",
+      "line": 22,
+      "location": "ecommerce/checkout.py:22",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-002",
+      "rule_name": "No personal or special-category data in logs",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "logger.debug(\"[REDACTED]\", customer.email)",
+      "explanation": "Logging email address which is personal data.",
+      "quote_sha256": "cd3d70896e80fddf7e9ff7f67eab5545d513fe02c4a9ff3938b8c92edd020f37",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log only an event ID or pseudonymous identifier needed for operations.",
+        "agent_steps": [
+          "Remove personal and special-category fields, and whole personal objects, from the output call.",
+          "Retain only the minimum operational metadata needed to debug the event.",
+          "Preserve the existing logging level unless the fix requires otherwise."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_d34f8f9a38fd64f9",
+      "fingerprint": "d34f8f9a38fd64f9599be6488d142d56a4f6a58bffa216a443560f6163b94d39",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/checkout.py",
+      "line": 29,
+      "location": "ecommerce/checkout.py:29",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-004",
+      "rule_name": "Minimize PHI in exports",
+      "severity": "high",
+      "risk_score": 80,
+      "confidence": "high",
+      "evidence_summary": "writer.writerow([c.full_name, c.email, c.shipping_address])",
+      "explanation": "Export function includes unnecessary personal data (full name, email, address) without minimization.",
+      "quote_sha256": "0abc7a7156743821677b80160d080b40887d19364370479a94713cef2f48a1d0",
+      "remediation": {
+        "strategy": "deidentify_export",
+        "suggestion": "Remove direct identifiers and unnecessary clinical fields from exported output.",
+        "agent_steps": [
+          "Restrict the exported fields to the minimum necessary non-identifying values.",
+          "Prefer pseudonymous IDs and aggregate values.",
+          "Preserve the export format expected by callers."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_f42aa1c70c469ba5",
+      "fingerprint": "f42aa1c70c469ba525133b9d02284924a365266ef5da2317fb23e9826b414b34",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/checkout.py",
+      "line": 29,
+      "location": "ecommerce/checkout.py:29",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-004",
+      "rule_name": "Minimize personal data in exports",
+      "severity": "high",
+      "risk_score": 80,
+      "confidence": "high",
+      "evidence_summary": "writer.writerow([c.full_name, c.email, c.shipping_address])",
+      "explanation": "Export includes unnecessary personal data fields that are not required for the export purpose.",
+      "quote_sha256": "0abc7a7156743821677b80160d080b40887d19364370479a94713cef2f48a1d0",
+      "remediation": {
+        "strategy": "minimize_export",
+        "suggestion": "Export only necessary fields, preferring aggregate or pseudonymous values.",
+        "agent_steps": [
+          "Remove personal fields not required by the export purpose.",
+          "Replace direct identifiers with pseudonymous IDs where possible.",
+          "Preserve the export schema only for fields that remain necessary."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_f768e111e3347736",
+      "fingerprint": "f768e111e33477364e68764f41fa6d9146d15177d919586f2f343eb2f1816527",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/storefront_widget.js",
+      "line": 3,
+      "location": "ecommerce/storefront_widget.js:3",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-002",
+      "rule_name": "No PHI in logs or console output",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "console.log(customer.email);",
+      "explanation": "Logging customer email address which is a direct identifier.",
+      "quote_sha256": "7baaf1274dc1dc1d39c1bf378747c2409cfb59a001754bcbc1d256c61324f426",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log a non-sensitive event or pseudonymous record identifier instead of PHI.",
+        "agent_steps": [
+          "Remove direct identifiers, clinical values, and whole sensitive objects from the log or print call.",
+          "Preserve operational context with an event ID or pseudonymous record ID.",
+          "Keep logging structure and severity unchanged unless required by the fix."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_a95b115f61103d64",
+      "fingerprint": "a95b115f61103d642df3976bce3ed7e9adb89046c28f1b6b40f5914cc6147026",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/storefront_widget.js",
+      "line": 3,
+      "location": "ecommerce/storefront_widget.js:3",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-002",
+      "rule_name": "No personal or special-category data in logs",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "console.log(customer.email);",
+      "explanation": "Logging email address which is personal data.",
+      "quote_sha256": "7baaf1274dc1dc1d39c1bf378747c2409cfb59a001754bcbc1d256c61324f426",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log only an event ID or pseudonymous identifier needed for operations.",
+        "agent_steps": [
+          "Remove personal and special-category fields, and whole personal objects, from the output call.",
+          "Retain only the minimum operational metadata needed to debug the event.",
+          "Preserve the existing logging level unless the fix requires otherwise."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_9ab51a08d8dc27b3",
+      "fingerprint": "9ab51a08d8dc27b3f8f7ad3fb87c4dd10e8e6cc4c47f23b00240f5b7acdd8add",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/storefront_widget.js",
+      "line": 4,
+      "location": "ecommerce/storefront_widget.js:4",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-002",
+      "rule_name": "No PHI in logs or console output",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "console.log(customer);",
+      "explanation": "Logging entire customer object containing personal information.",
+      "quote_sha256": "84c0c82b82136c231bb44dc39639c9cf2e714d4b6d638a7d73beeb651b542283",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log a non-sensitive event or pseudonymous record identifier instead of PHI.",
+        "agent_steps": [
+          "Remove direct identifiers, clinical values, and whole sensitive objects from the log or print call.",
+          "Preserve operational context with an event ID or pseudonymous record ID.",
+          "Keep logging structure and severity unchanged unless required by the fix."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_695f86adc77c28e2",
+      "fingerprint": "695f86adc77c28e2b54fd3081c6f39895c9bbce82b93095fa35670a68a116f6c",
+      "status": "open",
+      "source": "llm",
+      "file": "ecommerce/storefront_widget.js",
+      "line": 4,
+      "location": "ecommerce/storefront_widget.js:4",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-002",
+      "rule_name": "No personal or special-category data in logs",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "console.log(customer);",
+      "explanation": "Logging entire customer object containing personal data.",
+      "quote_sha256": "84c0c82b82136c231bb44dc39639c9cf2e714d4b6d638a7d73beeb651b542283",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log only an event ID or pseudonymous identifier needed for operations.",
+        "agent_steps": [
+          "Remove personal and special-category fields, and whole personal objects, from the output call.",
+          "Retain only the minimum operational metadata needed to debug the event.",
+          "Preserve the existing logging level unless the fix requires otherwise."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_9f578df3f3ca2a0d",
+      "fingerprint": "9f578df3f3ca2a0d5f07b03668702de97e35f74a970fc571b0bed4202ee06671",
+      "status": "open",
+      "source": "llm",
+      "file": "web/patient_portal.js",
+      "line": 3,
+      "location": "web/patient_portal.js:3",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-002",
+      "rule_name": "No PHI in logs or console output",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "console.log(user.email);",
+      "explanation": "Logging user email address which is a direct identifier.",
+      "quote_sha256": "1eb2407fa86fc99c4a91159f666eeeeb1c83b72289eeb8d8f386136c910b9399",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log a non-sensitive event or pseudonymous record identifier instead of PHI.",
+        "agent_steps": [
+          "Remove direct identifiers, clinical values, and whole sensitive objects from the log or print call.",
+          "Preserve operational context with an event ID or pseudonymous record ID.",
+          "Keep logging structure and severity unchanged unless required by the fix."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_0cb1b8dd57be666c",
+      "fingerprint": "0cb1b8dd57be666c6824985a5dfbd1868c301b55962eef8bc91e2f97657b6822",
+      "status": "open",
+      "source": "llm",
+      "file": "web/patient_portal.js",
+      "line": 3,
+      "location": "web/patient_portal.js:3",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-002",
+      "rule_name": "No personal or special-category data in logs",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "console.log(user.email);",
+      "explanation": "Logging email address which is personal data.",
+      "quote_sha256": "1eb2407fa86fc99c4a91159f666eeeeb1c83b72289eeb8d8f386136c910b9399",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log only an event ID or pseudonymous identifier needed for operations.",
+        "agent_steps": [
+          "Remove personal and special-category fields, and whole personal objects, from the output call.",
+          "Retain only the minimum operational metadata needed to debug the event.",
+          "Preserve the existing logging level unless the fix requires otherwise."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_5897f97d6a50d8a3",
+      "fingerprint": "5897f97d6a50d8a36876b8f69d372f1ae757701b3076f7f8db35f64865fecde0",
+      "status": "open",
+      "source": "llm",
+      "file": "web/patient_portal.js",
+      "line": 4,
+      "location": "web/patient_portal.js:4",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-002",
+      "rule_name": "No PHI in logs or console output",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "console.log(user);",
+      "explanation": "Logging entire user object containing personal information.",
+      "quote_sha256": "57c1b94f7f4414beefb0bdbb24a942c9e41280a29ec284fa408a61d925dbc938",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log a non-sensitive event or pseudonymous record identifier instead of PHI.",
+        "agent_steps": [
+          "Remove direct identifiers, clinical values, and whole sensitive objects from the log or print call.",
+          "Preserve operational context with an event ID or pseudonymous record ID.",
+          "Keep logging structure and severity unchanged unless required by the fix."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_a8ccae6d94195043",
+      "fingerprint": "a8ccae6d94195043e0ed96035300f3a15291d8cf348ea84c8963878addb22140",
+      "status": "open",
+      "source": "llm",
+      "file": "web/patient_portal.js",
+      "line": 4,
+      "location": "web/patient_portal.js:4",
+      "policy_id": "gdpr",
+      "rule_id": "GDPR-002",
+      "rule_name": "No personal or special-category data in logs",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "console.log(user);",
+      "explanation": "Logging entire user object containing personal data.",
+      "quote_sha256": "57c1b94f7f4414beefb0bdbb24a942c9e41280a29ec284fa408a61d925dbc938",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log only an event ID or pseudonymous identifier needed for operations.",
+        "agent_steps": [
+          "Remove personal and special-category fields, and whole personal objects, from the output call.",
+          "Retain only the minimum operational metadata needed to debug the event.",
+          "Preserve the existing logging level unless the fix requires otherwise."
+        ]
+      }
+    },
+    {
+      "violation_id": "v_6fde60cc969d4ce1",
+      "fingerprint": "6fde60cc969d4ce18b8c71049816aacae416654652bb4aaa60a5d17a12871658",
+      "status": "open",
+      "source": "llm",
+      "file": "web/patient_portal.js",
+      "line": 8,
+      "location": "web/patient_portal.js:8",
+      "policy_id": "hipaa",
+      "rule_id": "HIPAA-002",
+      "rule_name": "No PHI in logs or console output",
+      "severity": "high",
+      "risk_score": 85,
+      "confidence": "high",
+      "evidence_summary": "console.debug(\"[REDACTED]\", patient.mrn, patient.diagnosis);",
+      "explanation": "Logging patient MRN and diagnosis which are sensitive health information.",
+      "quote_sha256": "85ce66d3cf351691e29ffe96c338f4693fdc2b7e875d66e75ff84dfffbb52e79",
+      "remediation": {
+        "strategy": "minimize_logging",
+        "suggestion": "Log a non-sensitive event or pseudonymous record identifier instead of PHI.",
+        "agent_steps": [
+          "Remove direct identifiers, clinical values, and whole sensitive objects from the log or print call.",
+          "Preserve operational context with an event ID or pseudonymous record ID.",
+          "Keep logging structure and severity unchanged unless required by the fix."
+        ]
+      }
+    }
+  ],
+  "report_path": ".privacy-agent/audit-logs/20261003T094802.376512Z-f90124b9-full-scan.json"
+}

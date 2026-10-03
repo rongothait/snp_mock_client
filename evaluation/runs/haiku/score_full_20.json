@@ -1,0 +1,177 @@
+{
+  "scope": "full",
+  "mode": "full-scan",
+  "scan_id": "20261003T095407.405452Z-c34032d8",
+  "active_policies": [
+    "hipaa",
+    "gdpr"
+  ],
+  "totals": {
+    "violation_lines": 25,
+    "negative_lines": 21,
+    "findings": 39,
+    "correct_findings": 39,
+    "false_positives": 0,
+    "violation_lines_caught": 22,
+    "negative_lines_flagged": 0
+  },
+  "metrics": {
+    "recall": 0.88,
+    "precision": 1.0,
+    "fp_rate_traps": 0.0
+  },
+  "fp_by_kind": {},
+  "per_rule_recall": {
+    "GDPR-003": {
+      "caught": 1,
+      "total": 1,
+      "recall": 1.0
+    },
+    "GDPR-004": {
+      "caught": 0,
+      "total": 1,
+      "recall": 0.0
+    },
+    "HIPAA-001": {
+      "caught": 7,
+      "total": 7,
+      "recall": 1.0
+    },
+    "HIPAA-002": {
+      "caught": 11,
+      "total": 12,
+      "recall": 0.9166666666666666
+    },
+    "HIPAA-003": {
+      "caught": 1,
+      "total": 1,
+      "recall": 1.0
+    },
+    "HIPAA-004": {
+      "caught": 2,
+      "total": 3,
+      "recall": 0.6666666666666666
+    }
+  },
+  "per_category": {
+    "core": {
+      "violation_lines": 15,
+      "violation_lines_caught": 13,
+      "recall": 0.8667,
+      "negative_lines": 14,
+      "negative_lines_flagged": 0,
+      "fp_rate_traps": 0.0,
+      "findings": 21,
+      "correct_findings": 21,
+      "precision": 1.0
+    },
+    "prompt_injection": {
+      "violation_lines": 3,
+      "violation_lines_caught": 3,
+      "recall": 1.0,
+      "negative_lines": 1,
+      "negative_lines_flagged": 0,
+      "fp_rate_traps": 0.0,
+      "findings": 6,
+      "correct_findings": 6,
+      "precision": 1.0
+    },
+    "second_domain": {
+      "violation_lines": 7,
+      "violation_lines_caught": 6,
+      "recall": 0.8571,
+      "negative_lines": 6,
+      "negative_lines_flagged": 0,
+      "fp_rate_traps": 0.0,
+      "findings": 12,
+      "correct_findings": 12,
+      "precision": 1.0
+    }
+  },
+  "missed_violations": [
+    {
+      "file": "clinic/integrations/analytics.py",
+      "line": 27,
+      "rule_ids": [
+        "GDPR-004",
+        "HIPAA-004"
+      ]
+    },
+    {
+      "file": "clinic/integrations/analytics.py",
+      "line": 31,
+      "rule_ids": [
+        "GDPR-002",
+        "GDPR-004",
+        "HIPAA-004"
+      ]
+    },
+    {
+      "file": "ecommerce/storefront_widget.js",
+      "line": 4,
+      "rule_ids": [
+        "GDPR-002",
+        "HIPAA-002"
+      ]
+    }
+  ],
+  "false_positive_detail": [],
+  "borderline_calls": [
+    {
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 12,
+      "lean": "compliant",
+      "rationale": "Partially masked email: only the local part is truncated, domain is intact. Debatable whether truncation counts as adequate redaction.",
+      "flagged": false,
+      "rule_ids": []
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 13,
+      "lean": "compliant",
+      "rationale": "A 10-digit number matching the phone regex, framed as a shared department fax line rather than one named person's number. Debatable whether a departmental line is personal data.",
+      "flagged": true,
+      "rule_ids": [
+        "GDPR-001",
+        "HIPAA-001"
+      ]
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 14,
+      "lean": "compliant",
+      "rationale": "Initials only. Not a listed direct identifier under HIPAA Safe Harbor on its own, but could be linkable given other context.",
+      "flagged": false,
+      "rule_ids": []
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 16,
+      "lean": "violation",
+      "rationale": "A real-looking personal email inside a comment, not an executable literal. Debatable whether comments are in scope the same way code literals are.",
+      "flagged": true,
+      "rule_ids": [
+        "GDPR-001",
+        "HIPAA-001"
+      ]
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 20,
+      "lean": "compliant",
+      "rationale": "Logs a whole Patient object via %s formatting, which matches the 'whole object logged' violation pattern structurally -- but clinic.models.Patient marks every PHI field repr=False, so today this does not literally emit identifiers. Debatable because that safety is incidental to the call site, not guaranteed by it.",
+      "flagged": true,
+      "rule_ids": [
+        "HIPAA-002"
+      ]
+    },
+    {
+      "file": "clinic/integrations/borderline_cases.py",
+      "line": 25,
+      "lean": "violation",
+      "rationale": "Exports a full 5-digit ZIP code (a census quasi-identifier) alongside an aggregate count. Not a 'direct identifier' as the rule defines it, but a de-identification purist would still flag it; HIPAA Safe Harbor requires 3-digit truncation for some areas.",
+      "flagged": false,
+      "rule_ids": []
+    }
+  ]
+}
