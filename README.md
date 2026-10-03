@@ -6,6 +6,8 @@ privacy-agent plugin. There is no real database: `clinic.db.connection.Database`
 builds a PostgreSQL DSN but connects to `MockConnection`, which records SQL and
 returns canned rows. **All data in this repo is synthetic.**
 
+The testing scenarios tested at the tech-report can be found on the `eval/benchmark` branch.
+
 ## Layout
 
 ```
